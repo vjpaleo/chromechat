@@ -1,0 +1,8 @@
+extends layout
+
+block content
+	h1= title
+	ul
+		each user, uid in userData
+			- user = user.getInfo()
+			li= user.userId + ' : ' + user.userName + ' : ' + user.userEmail
