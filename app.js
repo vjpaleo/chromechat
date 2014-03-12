@@ -1,47 +1,46 @@
-
 /**
  * Module dependencies.
  */
+ 
+var express = require('express')
+  , routes = require('./routes')
+  , http = require('http');
 
-var express = require('express');
+var cookie = require('cookie');
 var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-
 var couchbase = require('couchbase');
 
 var app = express();
-
-// all environments
-app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
-app.use(function( req, res, next) {
-
-	res.set('X-Powered-By', 'Node Chat');
-	next();
+var server = app.listen(3000);
+var io = require('socket.io').listen(server);
+ 
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.use(express.favicon());
+  app.use(express.logger('dev'));
+  app.use(express.static(__dirname + '/public'));
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(function( req, res, next) {
+    res.set('X-Powered-By', 'Node Chat');
+    next();
+  });
+  app.use(app.router);
 });
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
-
-// development only
-if ('development' == app.get('env')) {
+ 
+app.configure('development', function(){
   app.use(express.errorHandler());
-}
-
+});
+ 
 app.get('/', routes.index);
 app.get('/users', user.list);
-app.get('/users/:uid', user.detail);
-
+app.get('/users/:uid', user.detail); 
 
 var db = new couchbase.Connection({host: 'localhost:8091', bucket: 'default'});
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+ 
+console.log("Express server listening on port 3000");
