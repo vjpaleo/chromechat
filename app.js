@@ -2,10 +2,10 @@
  * Module dependencies.
  */
  
-var express = require('express')
-  , routes = require('./routes')
-  , http = require('http');
-
+var express = require('express');
+var routes = require('./routes');
+var http = require('http');
+var chatter = require('chatter');
 var cookie = require('cookie');
 var user = require('./routes/user');
 var path = require('path');
@@ -41,10 +41,11 @@ app.get('/users/:uid', user.detail);
 var db = new couchbase.Connection({host: 'localhost:8091', bucket: 'default'});
 
 
-chat_room.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function (socket) {
 
   var parsed = cookie.parse(socket.handshake.headers.cookie);
-
+  console.log(parsed);
+  /*
   joomla.auth_cookies(parsed, function  (j_user) {
     if (j_user.username === "") {
       chatter.failure(socket);
@@ -56,6 +57,7 @@ chat_room.sockets.on('connection', function (socket) {
       });
     }
   });
+  */
 
 });
  

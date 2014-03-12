@@ -15,7 +15,7 @@ for (var uid in userData) {
 	
 	cacheData.setData(uid, userData[uid].getInfo());
 
-	console.log(JSON.stringify(cacheData.getData(uid)));
+	//console.log(JSON.stringify(cacheData.getData(uid)));
 }
 
 exports.detail = function(req, res) {
