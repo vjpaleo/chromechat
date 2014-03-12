@@ -7,9 +7,7 @@ var express = require('express')
   , http = require('http');
 
 var cookie = require('cookie');
-var routes = require('./routes');
 var user = require('./routes/user');
-var http = require('http');
 var path = require('path');
 var couchbase = require('couchbase');
 
