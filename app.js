@@ -41,23 +41,12 @@ app.get('/users/:uid', user.detail);
 var db = new couchbase.Connection({host: 'localhost:8091', bucket: 'default'});
 
 
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function (client) {
 
-  var parsed = cookie.parse(socket.handshake.headers.cookie);
-  console.log(parsed);
-  /*
-  joomla.auth_cookies(parsed, function  (j_user) {
-    if (j_user.username === "") {
-      chatter.failure(socket);
-    } else {
-      chatter.connect_chatter({
-        socket: socket,
-        all_sockets: chat_room.sockets,
-        username: j_user.username
-      });
-    }
-  });
-  */
+   client.on('message', function(err, msg){
+   		console.log(msg);
+        client.broadcast.emit('message', msg);
+    });
 
 });
  
