@@ -42,12 +42,15 @@ var db = new couchbase.Connection({host: 'localhost:8091', bucket: 'default'});
 
 
 io.sockets.on('connection', function (client) {
-
+  console.log('conection etablished');
    client.on('message', function(err, msg){
-   		console.log(msg);
-        client.broadcast.emit('message', msg);
+      console.log('client message');
+      console.log(err);
+      io.sockets.emit('message', err);
+      client.broadcast.emit('message', err);
     });
 
 });
+
  
 console.log("Express server listening on port 3000");
