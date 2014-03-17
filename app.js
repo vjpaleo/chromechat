@@ -38,17 +38,37 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/users/:uid', user.detail); 
 
-var db = new couchbase.Connection({host: 'localhost:8091', bucket: 'default'});
+//var db = new couchbase.Connection({host: 'localhost:8091', bucket: 'default'});
+
+var userDetail = function (uai) {
+
+  var db = new couchbase.Connection({host: 'localhost:8091', bucket: 'default'});
+
+console.log(db);
+
+  var userData = false;
+  
+  userData = db.get(uai, function(err, result) {
+    console.log(result);
+    return userData = result;
+  });
+
+  return userData;
+};
+
+userDetail(1393859147127001);
 
 
 io.sockets.on('connection', function (client) {
   console.log('conection etablished');
+   
    client.on('message', function(err, msg){
       console.log('client message');
       console.log(err);
       io.sockets.emit('message', err);
       client.broadcast.emit('message', err);
     });
+    
    /*
    client.emit('welcome', function(data) {
     console.log('client welcome');
@@ -59,15 +79,30 @@ io.sockets.on('connection', function (client) {
   client.on('auth', function(data){
       console.log('uai >>> '+ data.uai);
       if(data.uai != '' && data.uai > 0) {
+        
+        userData = userDetail(data.uai);
+        if(userData) {
+          console.log('auth_success');
+          console.log(userData);
+          var responseData = {'message': 'success'};
+          io.sockets.emit('auth_response', responseData);
+        }
+        /*
         db.get(data.uai, function(err, result) {
           console.log(result);
-        });  
+          var responseData = {'message': 'success'};
+          io.sockets.emit('auth_response', responseData);
+        });
+        */  
       }
-      
+
   });
-  client.emit('welcome', {'message' : "Welcome to node chat."});
+  client.on('welcome', function(data) {
+    console.log("welcome user");
+      //io.sockets.emit('message', "Welcome to node chat.");
+  });
 
 });
 
- 
+
 console.log("Express server listening on port 3000");
