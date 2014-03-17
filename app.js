@@ -49,6 +49,23 @@ io.sockets.on('connection', function (client) {
       io.sockets.emit('message', err);
       client.broadcast.emit('message', err);
     });
+   /*
+   client.emit('welcome', function(data) {
+    console.log('client welcome');
+    data['message'] = "Welcome to Node Chat Box.";
+    return data;
+   });
+  */
+  client.on('auth', function(data){
+      console.log('uai >>> '+ data.uai);
+      if(data.uai != '' && data.uai > 0) {
+        db.get(data.uai, function(err, result) {
+          console.log(result);
+        });  
+      }
+      
+  });
+  client.emit('welcome', {'message' : "Welcome to node chat."});
 
 });
 
