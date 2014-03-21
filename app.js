@@ -1,7 +1,6 @@
 /**
  * Module dependencies.
  */
- 
 var express = require('express');
 var routes = require('./routes');
 var http = require('http');
@@ -33,7 +32,7 @@ app.configure(function(){
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
- 
+
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/users/:uid', user.detail); 

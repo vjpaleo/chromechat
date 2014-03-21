@@ -12,6 +12,7 @@
     "socket.io": "0.9.6",
     "connect": "1.9.2",
     "couchbase": "1.2.1",
+    "memcached": "0.2.6",
     "chatter": "~0.0.1",
     "cookie": "0.0.4"
   }
