@@ -42,7 +42,10 @@ app.get('/users/:uid', user.detail);
 
 var userDetail = function (uai) {
 
-  var db = new couchbase.Connection({host: 'localhost:8091', bucket: 'default'});
+  var db = new couchbase.Connection({host: 'localhost:8091', bucket: 'default'}, 
+    function(err){ 
+      console.log('couchbase connection error '+ err);
+    });
 
 console.log(db);
 
